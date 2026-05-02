@@ -1,0 +1,261 @@
+.ngo-dashboard {
+  display: flex;
+  min-height: 100vh;
+  background: #f8fbff;
+}
+
+.sidebar {
+  width: 250px;
+  background: white;
+  border-right: 1px solid #e5e4e7;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-header h2 {
+  margin: 0 0 24px 0;
+  color: #2d6c9b;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.sidebar-nav button {
+  background: transparent;
+  border: none;
+  padding: 12px 16px;
+  text-align: left;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  color: #666;
+  transition: background 0.3s;
+}
+
+.sidebar-nav button.active {
+  background: #2d6c9b;
+  color: white;
+}
+
+.sidebar-nav button:hover {
+  background: #e5e4e7;
+}
+
+.logout-btn {
+  background: #d83535;
+  color: white;
+  border: none;
+  padding: 12px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  margin-top: auto;
+}
+
+.dashboard-content {
+  flex: 1;
+  padding: 24px;
+  overflow-y: auto;
+}
+
+.ngo-home, .active-allocation, .available-resources, .history {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.ngo-home h2, .active-allocation h2, .available-resources h2, .history h2 {
+  margin-top: 0;
+  color: #2d6c9b;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin: 24px 0;
+}
+
+.stat-card {
+  background: #f9f9f9;
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.stat-card h3 {
+  margin: 0 0 8px 0;
+  color: #666;
+}
+
+.stat-number {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #2d6c9b;
+  margin: 0;
+}
+
+.recent-activity {
+  margin-top: 32px;
+}
+
+.recent-activity h3 {
+  margin-bottom: 16px;
+  color: #2d6c9b;
+}
+
+.recent-activity ul {
+  list-style: none;
+  padding: 0;
+}
+
+.recent-activity li {
+  padding: 8px 0;
+  border-bottom: 1px solid #e5e4e7;
+}
+
+.requests-list, .resources-list, .history-list {
+  display: grid;
+  gap: 16px;
+}
+
+.request-card, .resource-card, .history-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  border: 1px solid #e5e4e7;
+  border-radius: 12px;
+  background: #f9f9f9;
+}
+
+.request-info, .resource-info, .history-info {
+  flex: 1;
+}
+
+.request-info h3, .resource-info h3, .history-info h3 {
+  margin: 0 0 8px 0;
+  font-size: 1.1rem;
+}
+
+.request-info p, .resource-info p, .history-info p {
+  margin: 4px 0;
+  color: #666;
+}
+
+.status {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.status.pending {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.status.in-progress {
+  background: #cce5ff;
+  color: #004085;
+}
+
+.status.completed {
+  background: #d4edda;
+  color: #155724;
+}
+
+.status.available {
+  background: #d4edda;
+  color: #155724;
+}
+
+.status.low-stock {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.request-actions, .resource-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.request-actions button, .resource-actions button {
+  background: #2d6c9b;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.resource-actions input {
+  width: 80px;
+  padding: 6px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.resource-actions .secondary {
+  background: #f4f8ff;
+  color: #2d6c9b;
+  border: 1px solid #2d6c9b;
+}
+
+.priority {
+  font-weight: 600;
+}
+
+.priority.high {
+  color: #d83535;
+}
+
+.priority.medium {
+  color: #f39c12;
+}
+
+.priority.low {
+  color: #27ae60;
+}
+
+@media (max-width: 768px) {
+  .ngo-dashboard {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid #e5e4e7;
+  }
+
+  .sidebar-nav {
+    flex-direction: row;
+    overflow-x: auto;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .request-card, .resource-card, .history-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .request-actions, .resource-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
