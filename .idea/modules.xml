@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/resource-allocation.iml" filepath="$PROJECT_DIR$/.idea/resource-allocation.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/Cloud-Based-Disaster-Management-System.iml" filepath="$PROJECT_DIR$/.idea/Cloud-Based-Disaster-Management-System.iml" />
+      <module fileurl="file://$PROJECT_DIR$/resource-allocation/resource-allocation.iml" filepath="$PROJECT_DIR$/resource-allocation/resource-allocation.iml" />
     </modules>
   </component>
 </project>
