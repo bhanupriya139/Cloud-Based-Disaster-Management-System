@@ -5,6 +5,15 @@ function UsersDashboard({ onNavigate }) {
   const [selectedIncident, setSelectedIncident] = useState(null)
   const [showModal, setShowModal] = useState(false)
   const [modalType, setModalType] = useState('')
+  const [requestForm, setRequestForm] = useState({
+    type: 'Medical Supplies',
+    quantity: '',
+    destination: '',
+    priority: 'Medium',
+    contactName: '',
+    contactPhone: '',
+    contactEmail: ''
+  })
 
   const incidents = [
     {
@@ -66,7 +75,15 @@ function UsersDashboard({ onNavigate }) {
   }
 
   const handleRequestResources = () => {
-    alert('Resource request submitted to available NGOs.')
+    alert(
+      `Resource request submitted to available NGOs.\n\n` +
+      `Type: ${requestForm.type}\n` +
+      `Quantity: ${requestForm.quantity}\n` +
+      `Destination: ${requestForm.destination}\n` +
+      `Priority: ${requestForm.priority}\n` +
+      `Contact: ${requestForm.contactName} (${requestForm.contactPhone}, ${requestForm.contactEmail})`
+    )
+    setRequestForm({ type: 'Medical Supplies', quantity: '', destination: '', priority: 'Medium', contactName: '', contactPhone: '', contactEmail: '' })
     closeModal()
   }
 
@@ -247,7 +264,7 @@ function UsersDashboard({ onNavigate }) {
                 <form onSubmit={(e) => { e.preventDefault(); handleRequestResources(); }}>
                   <label>
                     Resource Type
-                    <select required>
+                    <select required value={requestForm.type} onChange={(e) => setRequestForm({ ...requestForm, type: e.target.value })}>
                       <option>Medical Supplies</option>
                       <option>Food Packages</option>
                       <option>Shelter Tents</option>
@@ -257,19 +274,31 @@ function UsersDashboard({ onNavigate }) {
                   </label>
                   <label>
                     Quantity
-                    <input type="number" placeholder="Enter quantity" required />
+                    <input type="number" placeholder="Enter quantity" required value={requestForm.quantity} onChange={(e) => setRequestForm({ ...requestForm, quantity: e.target.value })} />
                   </label>
                   <label>
                     Destination
-                    <input type="text" placeholder="Enter destination location" required />
+                    <input type="text" placeholder="Enter destination location" required value={requestForm.destination} onChange={(e) => setRequestForm({ ...requestForm, destination: e.target.value })} />
                   </label>
                   <label>
                     Priority
-                    <select required>
+                    <select required value={requestForm.priority} onChange={(e) => setRequestForm({ ...requestForm, priority: e.target.value })}>
                       <option>Low</option>
                       <option>Medium</option>
                       <option>High</option>
                     </select>
+                  </label>
+                  <label>
+                    Contact Name
+                    <input type="text" placeholder="Full name" required value={requestForm.contactName} onChange={(e) => setRequestForm({ ...requestForm, contactName: e.target.value })} />
+                  </label>
+                  <label>
+                    Contact Phone
+                    <input type="tel" placeholder="Phone number" required value={requestForm.contactPhone} onChange={(e) => setRequestForm({ ...requestForm, contactPhone: e.target.value })} />
+                  </label>
+                  <label>
+                    Contact Email
+                    <input type="email" placeholder="Email address" required value={requestForm.contactEmail} onChange={(e) => setRequestForm({ ...requestForm, contactEmail: e.target.value })} />
                   </label>
                   <button type="submit">Request Resources</button>
                 </form>

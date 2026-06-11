@@ -1,8 +1,9 @@
 import './HomePage.css'
+import heroBg from '../assets/hero.png'
 
 function HomePage({ onNavigate }) {
   return (
-    <main className="home-page">
+    <main className="home-page" style={{ backgroundImage: `url(${heroBg})` }}>
       <header className="page-header">
         <div className="brand">
           <span className="brand-badge">DMS</span>

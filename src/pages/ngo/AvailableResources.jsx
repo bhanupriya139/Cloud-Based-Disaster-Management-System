@@ -15,9 +15,6 @@ function AvailableResources() {
     )
   }
 
-  const handleRequestMore = (id) => {
-    alert(`Requesting more ${resources.find(r => r.id === id).name}`)
-  }
 
   return (
     <div className="available-resources">
@@ -42,7 +39,6 @@ function AvailableResources() {
                 onChange={(e) => handleUpdateResource(resource.id, parseInt(e.target.value) || 0)}
               />
               <button onClick={() => handleUpdateResource(resource.id, resource.quantity)}>Update</button>
-              <button className="secondary" onClick={() => handleRequestMore(resource.id)}>Request More</button>
             </div>
           </div>
         ))}
