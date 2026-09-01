@@ -28,6 +28,9 @@
   --danger: #ef4444;
   --danger-dark: #dc2626;
   --success: #10b981;
+  --info: #3b82f6;
+  --primary: #2563eb;
+  --bg-muted: #f3f4f6;
 
   /* elevation */
   --shadow-sm: 0 2px 8px rgba(12,20,40,0.06);

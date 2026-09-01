@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import {
   AlertTriangle,
   Users,
@@ -20,9 +20,16 @@ import './pages.css'
 export default function AdminDashboard() {
   const [stats, setStats] = useState(null)
 
+  const navigate = useNavigate()
+
   useEffect(() => {
+    if (localStorage.getItem('isAdminAuthenticated') !== 'true') {
+      navigate('/admin-login')
+      return
+    }
+
     getAdminStats().then(setStats)
-  }, [])
+  }, [navigate])
 
   if (!stats) {
     return (
@@ -104,14 +111,12 @@ export default function AdminDashboard() {
 
 export function MoreMenu() {
   const links = [
-    { to: '/emergency', icon: Siren, label: 'Emergency' },
-    { to: '/ngos', icon: Building2, label: 'NGO Directory' },
-    { to: '/weather', icon: CloudRain, label: 'Weather' },
-    { to: '/routes', icon: Route, label: 'Safe Routes' },
-    { to: '/alerts', icon: Bell, label: 'Alerts' },
-    { to: '/analytics', icon: BarChart3, label: 'Analytics' },
+    { to: '/admin/emergency', icon: Siren, label: 'Emergency' },
+    { to: '/admin/ngos', icon: Building2, label: 'NGO Directory' },
+    { to: '/admin/alerts', icon: Bell, label: 'Alerts' },
+    { to: '/admin/analytics', icon: BarChart3, label: 'Analytics' },
     { to: '/admin', icon: LayoutDashboard, label: 'Admin Dashboard' },
-    { to: '/settings', icon: Settings, label: 'Settings' },
+    { to: '/admin/settings', icon: Settings, label: 'Settings' },
   ]
 
   return (

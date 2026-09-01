@@ -169,6 +169,16 @@
   margin-bottom: 24px;
 }
 
+.auth-action-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.action-btn.ngo { background: var(--info); }
+.action-btn.admin { background: var(--primary); }
+
 .action-btn {
   display: flex;
   flex-direction: column;

@@ -1,5 +1,6 @@
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8080/api'
-const USE_MOCK = import.meta.env.VITE_USE_MOCK_DATA === 'true'
+const useMockEnv = import.meta.env.VITE_USE_MOCK_DATA
+const USE_MOCK = useMockEnv === 'true' || useMockEnv === undefined
 
 export { API_BASE, USE_MOCK }
 

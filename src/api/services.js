@@ -4,9 +4,9 @@ import {
   mockMapMarkers,
   mockEmergencyServices,
   mockNGOs,
-  mockWeather,
   mockAlerts,
   mockAdminStats,
+  mockReportedDisasters,
 } from '../data/mockData'
 
 const delay = (ms = 300) => new Promise((resolve) => setTimeout(resolve, ms))
@@ -16,7 +16,14 @@ export async function getDashboard() {
     await delay()
     return mockDashboard
   }
-  return apiRequest('/dashboard')
+
+  try {
+    return await apiRequest('/dashboard')
+  } catch (error) {
+    console.error('Dashboard request failed, falling back to mock data:', error)
+    await delay()
+    return mockDashboard
+  }
 }
 
 export async function getWeather() {
@@ -40,7 +47,14 @@ export async function getMapMarkers() {
     await delay()
     return mockMapMarkers
   }
-  return apiRequest('/map/markers')
+
+  try {
+    return await apiRequest('/map/markers')
+  } catch (error) {
+    console.error('Map markers request failed, falling back to mock markers:', error)
+    await delay()
+    return mockMapMarkers
+  }
 }
 
 export async function getNearbyResources(lat, lng) {
@@ -132,4 +146,12 @@ export async function triggerSOS(location) {
     method: 'POST',
     body: { location },
   })
+}
+
+export async function getReportedDisasters() {
+  if (USE_MOCK) {
+    await delay()
+    return mockReportedDisasters
+  }
+  return apiRequest('/disasters/reported')
 }

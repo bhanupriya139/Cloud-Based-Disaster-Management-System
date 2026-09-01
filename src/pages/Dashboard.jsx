@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import {
   AlertTriangle,
   CloudRain,
@@ -10,6 +10,8 @@ import {
   Ambulance,
   Flame,
   HeartPulse,
+  Users,
+  Lock,
 } from 'lucide-react'
 import Header from '../components/layout/Header'
 import DisasterMap from '../components/map/DisasterMap'
@@ -17,19 +19,32 @@ import { getDashboard, getMapMarkers } from '../api/services'
 import './pages.css'
 
 export default function Dashboard() {
+  const navigate = useNavigate()
   const [data, setData] = useState(null)
   const [markers, setMarkers] = useState([])
+  const [error, setError] = useState(null)
 
   useEffect(() => {
-    getDashboard().then(setData)
-    getMapMarkers().then(setMarkers)
+    getDashboard()
+      .then(setData)
+      .catch((err) => {
+        console.error(err)
+        setError('Unable to load dashboard data. Please refresh the page.')
+      })
+
+    getMapMarkers().then(setMarkers).catch((err) => {
+      console.error(err)
+      setError('Unable to load map markers. Please refresh the page.')
+    })
   }, [])
 
   if (!data) {
     return (
       <div className="page">
         <Header />
-        <div className="page-content loading">Loading dashboard...</div>
+        <div className="page-content loading">
+          {error || 'Loading dashboard...'}
+        </div>
       </div>
     )
   }
@@ -130,6 +145,17 @@ export default function Dashboard() {
           <Link to="/routes" className="action-btn routes">
             <Route size={24} />
             Safe Routes
+          </Link>
+        </div>
+
+        <div className="auth-action-row">
+          <Link to="/ngo-login" className="action-btn ngo">
+            <Users size={24} />
+            NGO Sign In / Sign Up
+          </Link>
+          <Link to="/admin-login" className="action-btn admin">
+            <Lock size={24} />
+            Admin Sign In
           </Link>
         </div>
 

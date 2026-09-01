@@ -76,6 +76,22 @@
   color: var(--accent);
 }
 
+.logout-item {
+  width: 100%;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.logout-item:hover {
+  background: rgba(255,255,255,0.06);
+  color: #fff;
+  transform: translateX(4px);
+}
+
 .helpline-btn {
   display: flex;
   align-items: center;

@@ -125,3 +125,9 @@ export const mockAdminStats = {
 }
 
 export const incidentTypes = ['Flood', 'Fire', 'Earthquake', 'Landslide', 'Cyclone', 'Other']
+
+export const mockReportedDisasters = [
+  { id: 1, location: 'Andheri East', type: 'Flood', status: 'Active' },
+  { id: 2, location: 'Bandra West', type: 'Fire', status: 'Resolved' },
+  { id: 3, location: 'Dharavi', type: 'Medical Emergency', status: 'In Progress' },
+]
