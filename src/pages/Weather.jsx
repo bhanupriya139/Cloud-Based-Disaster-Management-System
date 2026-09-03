@@ -2,20 +2,25 @@ import { useEffect, useState } from 'react'
 import { CloudRain, Droplets, Wind, Eye } from 'lucide-react'
 import Header from '../components/layout/Header'
 import { getWeather } from '../api/services'
+import { getCurrentLocation } from '../utils/location'
 import './pages.css'
 
 export default function Weather() {
   const [weather, setWeather] = useState(null)
+  const [error, setError] = useState(null)
 
   useEffect(() => {
-    getWeather().then(setWeather)
+    getCurrentLocation()
+      .then(({ lat, lng }) => getWeather(lat, lng))
+      .then(setWeather)
+      .catch((err) => setError(err.message))
   }, [])
 
   if (!weather) {
     return (
       <div className="page">
         <Header />
-        <div className="page-content loading">Loading weather...</div>
+        <div className="page-content loading">{error || 'Finding your location and loading weather...'}</div>
       </div>
     )
   }

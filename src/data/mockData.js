@@ -131,3 +131,9 @@ export const mockReportedDisasters = [
   { id: 2, location: 'Bandra West', type: 'Fire', status: 'Resolved' },
   { id: 3, location: 'Dharavi', type: 'Medical Emergency', status: 'In Progress' },
 ]
+
+export const mockNGOAllocationHistory = [
+  { id: 1, location: 'Andheri East', latitude: 19.1197, longitude: 72.8468, type: 'Flood', status: 'Active', allocatedOn: 'Sep 2, 2026' },
+  { id: 2, location: 'Bandra West', latitude: 19.0607, longitude: 72.8362, type: 'Fire', status: 'Resolved', allocatedOn: 'Aug 28, 2026' },
+  { id: 3, location: 'Dharavi', latitude: 19.0437, longitude: 72.8538, type: 'Medical Emergency', status: 'In Progress', allocatedOn: 'Aug 24, 2026' },
+]

@@ -42,7 +42,7 @@ export default function ReportIncident() {
 
   return (
     <div className="page">
-      <Header />
+      <Header userName="NGO" />
       <div className="page-content narrow">
         <h2 className="page-title">Report Incident</h2>
         <p className="page-subtitle">Help authorities respond faster by reporting what you see</p>

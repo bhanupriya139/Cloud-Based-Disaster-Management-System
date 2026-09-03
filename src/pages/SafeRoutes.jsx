@@ -3,19 +3,28 @@ import { Navigation, Shield, Zap } from 'lucide-react'
 import Header from '../components/layout/Header'
 import DisasterMap from '../components/map/DisasterMap'
 import { getSafeRoute } from '../api/services'
+import { getCurrentLocation } from '../utils/location'
 import './pages.css'
 
 export default function SafeRoutes() {
   const [routeType, setRouteType] = useState('safest')
   const [route, setRoute] = useState(null)
+  const [location, setLocation] = useState(null)
+  const [error, setError] = useState(null)
 
   useEffect(() => {
-    getSafeRoute(
-      { lat: 19.076, lng: 72.8777 },
-      { lat: 19.07, lng: 72.87 },
-      routeType
-    ).then(setRoute)
+    getCurrentLocation()
+      .then((currentLocation) => {
+        setLocation(currentLocation)
+        return getSafeRoute(currentLocation, { lat: 19.07, lng: 72.87 }, routeType)
+      })
+      .then(setRoute)
+      .catch((err) => setError(err.message))
   }, [routeType])
+
+  if (!location || !route) {
+    return <div className="page"><Header /><div className="page-content loading">{error || 'Finding your location and planning a route...'}</div></div>
+  }
 
   return (
     <div className="page">
@@ -53,7 +62,7 @@ export default function SafeRoutes() {
         <DisasterMap
           route={route}
           markers={[
-            { id: 'start', type: 'hospital', lat: 19.076, lng: 72.8777, label: 'Your Location' },
+            { id: 'start', type: 'hospital', lat: location.lat, lng: location.lng, label: 'Your Location' },
             { id: 'end', type: 'shelter', lat: 19.07, lng: 72.87, label: 'Relief Camp' },
           ]}
           height="400px"

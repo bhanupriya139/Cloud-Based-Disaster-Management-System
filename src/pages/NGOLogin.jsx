@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Users, Mail, Key } from 'lucide-react'
 import Header from '../components/layout/Header'
+import { getNGOSignupRequests, submitNGOSignupRequest } from '../api/services'
 import './pages.css'
 
 const DEFAULT_NGO_EMAIL = 'ngo@example.com'
@@ -18,10 +19,6 @@ function getStoredNGOUsers() {
   }
 }
 
-function saveStoredNGOUsers(users) {
-  localStorage.setItem(NGO_USERS_KEY, JSON.stringify(users))
-}
-
 export default function NGOLogin() {
   const navigate = useNavigate()
   const [mode, setMode] = useState('signin')
@@ -29,6 +26,9 @@ export default function NGOLogin() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
+  const [phone, setPhone] = useState('')
+  const [address, setAddress] = useState('')
+  const [organizationInfo, setOrganizationInfo] = useState('')
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
 
@@ -59,17 +59,29 @@ export default function NGOLogin() {
 
       const users = getStoredNGOUsers()
       const exists = users.some((user) => user.email.toLowerCase() === email.toLowerCase())
-      if (exists || email.toLowerCase() === DEFAULT_NGO_EMAIL) {
+      const requests = getNGOSignupRequests()
+      const requestExists = requests.some((request) => request.email === email.toLowerCase() && request.status !== 'Rejected')
+      if (exists || requestExists || email.toLowerCase() === DEFAULT_NGO_EMAIL) {
         setError('This email is already registered. Please sign in.')
         return
       }
 
-      const newUsers = [...users, { name: name.trim(), email: email.toLowerCase(), password }]
-      saveStoredNGOUsers(newUsers)
-      localStorage.setItem('isNGOAuthenticated', 'true')
-      localStorage.setItem('currentNGOEmail', email.toLowerCase())
-      localStorage.setItem('currentNGOName', name.trim())
-      navigate('/ngo-dashboard')
+      submitNGOSignupRequest({
+        name: name.trim(),
+        email: email.toLowerCase(),
+        password,
+        phone: phone.trim(),
+        address: address.trim(),
+        organizationInfo: organizationInfo.trim(),
+      })
+      setSuccess('Your NGO registration request was sent to the admin for approval.')
+      setName('')
+      setEmail('')
+      setPassword('')
+      setConfirmPassword('')
+      setPhone('')
+      setAddress('')
+      setOrganizationInfo('')
       return
     }
 
@@ -77,6 +89,14 @@ export default function NGOLogin() {
     const match = storedUsers.find(
       (user) => user.email.toLowerCase() === email.toLowerCase() && user.password === password
     )
+
+    const pendingRequest = getNGOSignupRequests().find(
+      (request) => request.email === email.toLowerCase() && request.status === 'Pending'
+    )
+    if (pendingRequest) {
+      setError('Your NGO registration is waiting for admin approval.')
+      return
+    }
 
     if (match || (email === DEFAULT_NGO_EMAIL && password === DEFAULT_NGO_PASSWORD)) {
       localStorage.setItem('isNGOAuthenticated', 'true')
@@ -98,7 +118,7 @@ export default function NGOLogin() {
 
   return (
     <div className="page">
-      <Header />
+      <Header userName="NGO" />
       <div className="page-content narrow">
         <div className="form-panel">
           <h2 className="page-title">NGO {mode === 'signin' ? 'Sign In' : 'Sign Up'}</h2>
@@ -126,6 +146,23 @@ export default function NGOLogin() {
                   required
                 />
               </div>
+            )}
+
+            {mode === 'signup' && (
+              <>
+                <div className="form-group">
+                  <label htmlFor="ngo-phone">Contact Number</label>
+                  <input id="ngo-phone" type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} required />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="ngo-address">Office Address</label>
+                  <input id="ngo-address" type="text" value={address} onChange={(e) => setAddress(e.target.value)} required />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="ngo-info">Organization Information</label>
+                  <textarea id="ngo-info" rows={3} value={organizationInfo} onChange={(e) => setOrganizationInfo(e.target.value)} placeholder="Describe your NGO and relief services" required />
+                </div>
+              </>
             )}
 
             <div className="form-group">

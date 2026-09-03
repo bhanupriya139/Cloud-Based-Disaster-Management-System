@@ -22,7 +22,7 @@ export default function NGODirectory() {
 
   return (
     <div className="page">
-      <Header />
+      <Header userName="NGO" />
       <div className="page-content">
         <h2 className="page-title">NGO Directory</h2>
         <p className="page-subtitle">Find nearby NGOs offering relief and support</p>

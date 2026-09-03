@@ -6,10 +6,25 @@ import {
   mockNGOs,
   mockAlerts,
   mockAdminStats,
+  mockWeather,
   mockReportedDisasters,
+  mockNGOAllocationHistory,
 } from '../data/mockData'
 
 const delay = (ms = 300) => new Promise((resolve) => setTimeout(resolve, ms))
+const NGO_REQUESTS_KEY = 'ngoSignupRequests'
+
+function getStoredNGORequests() {
+  try {
+    return JSON.parse(localStorage.getItem(NGO_REQUESTS_KEY)) || []
+  } catch {
+    return []
+  }
+}
+
+function saveNGORequests(requests) {
+  localStorage.setItem(NGO_REQUESTS_KEY, JSON.stringify(requests))
+}
 
 export async function getDashboard() {
   if (USE_MOCK) {
@@ -26,12 +41,13 @@ export async function getDashboard() {
   }
 }
 
-export async function getWeather() {
+export async function getWeather(lat, lng) {
   if (USE_MOCK) {
     await delay()
     return mockWeather
   }
-  return apiRequest('/weather')
+  const params = lat !== undefined && lng !== undefined ? `?lat=${lat}&lng=${lng}` : ''
+  return apiRequest(`/weather${params}`)
 }
 
 export async function getActiveAlerts() {
@@ -112,14 +128,18 @@ export async function reportIncident(formData) {
 export async function getSafeRoute(from, to, type = 'safest') {
   if (USE_MOCK) {
     await delay()
+    const midpoint = {
+      lat: (from.lat + to.lat) / 2,
+      lng: (from.lng + to.lng) / 2,
+    }
     return {
       type,
       distance: '4.2 km',
       duration: '18 min',
       waypoints: [
-        { lat: 19.076, lng: 72.8777, label: 'Your Location' },
-        { lat: 19.08, lng: 72.88, label: 'Checkpoint' },
-        { lat: 19.07, lng: 72.87, label: 'Relief Camp' },
+        { lat: from.lat, lng: from.lng, label: 'NGO Location' },
+        { lat: midpoint.lat, lng: midpoint.lng, label: 'Checkpoint' },
+        { lat: to.lat, lng: to.lng, label: 'Disaster Location' },
       ],
     }
   }
@@ -154,4 +174,67 @@ export async function getReportedDisasters() {
     return mockReportedDisasters
   }
   return apiRequest('/disasters/reported')
+}
+
+export async function getNGOAllocationHistory() {
+  if (USE_MOCK) {
+    await delay()
+    return mockNGOAllocationHistory
+  }
+
+  return apiRequest('/ngo/allocations/history')
+}
+
+export async function getNGOAllocationRoute(allocationId, from) {
+  if (USE_MOCK) {
+    await delay()
+    const allocation = mockNGOAllocationHistory.find((item) => String(item.id) === String(allocationId))
+    if (!allocation) return null
+    return getSafeRoute(
+      { lat: from.latitude, lng: from.longitude },
+      { lat: allocation.latitude, lng: allocation.longitude },
+    )
+  }
+
+  return apiRequest(`/ngo/allocations/${allocationId}/route`, {
+    method: 'POST',
+    body: { from },
+  })
+}
+
+export function submitNGOSignupRequest(request) {
+  const requests = getStoredNGORequests()
+  const nextRequest = {
+    ...request,
+    id: `NGO-${Date.now()}`,
+    status: 'Pending',
+    submittedAt: new Date().toISOString(),
+  }
+  saveNGORequests([...requests, nextRequest])
+  return nextRequest
+}
+
+export function getNGOSignupRequests() {
+  return getStoredNGORequests()
+}
+
+export function updateNGOSignupRequest(requestId, status) {
+  const requests = getStoredNGORequests()
+  const updatedRequests = requests.map((request) => (
+    request.id === requestId ? { ...request, status } : request
+  ))
+  saveNGORequests(updatedRequests)
+
+  if (status === 'Accepted') {
+    const approvedUsers = JSON.parse(localStorage.getItem('ngoUsers') || '[]')
+    const request = updatedRequests.find((item) => item.id === requestId)
+    if (request && !approvedUsers.some((user) => user.email === request.email)) {
+      localStorage.setItem('ngoUsers', JSON.stringify([
+        ...approvedUsers,
+        { name: request.name, email: request.email, password: request.password },
+      ]))
+    }
+  }
+
+  return updatedRequests.find((request) => request.id === requestId)
 }

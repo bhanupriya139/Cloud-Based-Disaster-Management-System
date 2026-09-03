@@ -8,9 +8,6 @@ import {
   CloudRain,
   Route,
   Bell,
-  Package,
-  BarChart3,
-  Settings,
   Shield,
   Phone,
 } from 'lucide-react'
@@ -25,9 +22,6 @@ const navItems = [
   { to: '/weather', icon: CloudRain, label: 'Weather' },
   { to: '/routes', icon: Route, label: 'Safe Routes' },
   { to: '/alerts', icon: Bell, label: 'Alerts' },
-  { to: '/resources', icon: Package, label: 'Resources' },
-  { to: '/analytics', icon: BarChart3, label: 'Analytics' },
-  { to: '/settings', icon: Settings, label: 'Settings' },
 ]
 
 export default function Sidebar() {

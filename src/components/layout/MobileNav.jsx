@@ -1,12 +1,11 @@
 import { NavLink } from 'react-router-dom'
-import { Home, Map, FileWarning, Package, Menu } from 'lucide-react'
+import { Home, Map, FileWarning, Menu } from 'lucide-react'
 import './MobileNav.css'
 
 const items = [
   { to: '/', icon: Home, label: 'Home' },
   { to: '/map', icon: Map, label: 'Map' },
   { to: '/report', icon: FileWarning, label: 'Report' },
-  { to: '/resources', icon: Package, label: 'Resources' },
   { to: '/more', icon: Menu, label: 'More' },
 ]
 

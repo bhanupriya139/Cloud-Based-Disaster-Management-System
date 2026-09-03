@@ -20,15 +20,13 @@ import NGODashboard from './pages/NGODashboard'
 
 // NGO Specific Pages
 import NGOMap from './pages/NGOMap'
-import NGOReport from './pages/NGOReport'
-import NGORoutes from './pages/NGORoutes'
 import NGOResources from './pages/NGOResources'
-import NGOSettings from './pages/NGOSettings'
+import NGOAlerts from './pages/NGOAlerts'
+import NGOAllocationRoute from './pages/NGOAllocationRoute'
 
 // Admin Specific Pages
-import AdminMap from './pages/AdminMap'
-import AdminEmergency from './pages/AdminEmergency'
 import AdminNGODirectory from './pages/AdminNGODirectory'
+import AdminNGORequests from './pages/AdminNGORequests'
 import AdminAlerts from './pages/AdminAlerts'
 import AdminResources from './pages/AdminResources'
 import AdminAnalytics from './pages/AdminAnalytics'
@@ -56,9 +54,8 @@ export default function App() {
         </Route>
         <Route path="admin" element={<AdminLayout />}>
           <Route index element={<AdminDashboard />} />
-          <Route path="map" element={<AdminMap />} />
-          <Route path="emergency" element={<AdminEmergency />} />
           <Route path="ngos" element={<AdminNGODirectory />} />
+          <Route path="ngo-requests" element={<AdminNGORequests />} />
           <Route path="alerts" element={<AdminAlerts />} />
           <Route path="resources" element={<AdminResources />} />
           <Route path="analytics" element={<AdminAnalytics />} />
@@ -68,10 +65,9 @@ export default function App() {
         <Route path="ngo-dashboard" element={<NGOLayout />}>
           <Route index element={<NGODashboard />} />
           <Route path="map" element={<NGOMap />} />
-          <Route path="report" element={<NGOReport />} />
-          <Route path="routes" element={<NGORoutes />} />
           <Route path="resources" element={<NGOResources />} />
-          <Route path="settings" element={<NGOSettings />} />
+          <Route path="alerts" element={<NGOAlerts />} />
+          <Route path="routes/:allocationId" element={<NGOAllocationRoute />} />
         </Route>
       </Routes>
     </BrowserRouter>

@@ -3,6 +3,7 @@ import { Camera, Mic, Video, MapPin, Send } from 'lucide-react'
 import Header from '../components/layout/Header'
 import { reportIncident } from '../api/services'
 import { incidentTypes } from '../data/mockData'
+import { getCurrentLocation } from '../utils/location'
 import './pages.css'
 
 export default function ReportIncident() {
@@ -20,15 +21,18 @@ export default function ReportIncident() {
     setLoading(true)
     setStatus(null)
 
-    const formData = new FormData()
-    formData.append('type', form.type)
-    formData.append('description', form.description)
-    formData.append('location', form.location)
-    if (files.photo) formData.append('photo', files.photo)
-    if (files.video) formData.append('video', files.video)
-    if (files.audio) formData.append('audio', files.audio)
-
     try {
+      const currentLocation = await getCurrentLocation()
+      const formData = new FormData()
+      formData.append('type', form.type)
+      formData.append('description', form.description)
+      formData.append('location', form.location)
+      formData.append('latitude', String(currentLocation.lat))
+      formData.append('longitude', String(currentLocation.lng))
+      if (files.photo) formData.append('photo', files.photo)
+      if (files.video) formData.append('video', files.video)
+      if (files.audio) formData.append('audio', files.audio)
+
       const result = await reportIncident(formData)
       setStatus({ type: 'success', message: result.message })
       setForm({ type: 'Flood', description: '', location: '' })

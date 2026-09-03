@@ -1,17 +1,14 @@
 import { useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { Users, HeartPulse, Building2, FileWarning, Route } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
+import { Users, HeartPulse, Building2, FileWarning } from 'lucide-react'
 import Header from '../components/layout/Header'
-import { getDashboard, getMapMarkers, getReportedDisasters } from '../api/services'
-import DisasterMap from '../components/map/DisasterMap'
+import { getDashboard, getNGOAllocationHistory } from '../api/services'
 import './pages.css'
 
 export default function NGODashboard() {
   const navigate = useNavigate()
   const [data, setData] = useState(null)
-  const [markers, setMarkers] = useState([])
-  const [disasters, setDisasters] = useState([])
-
+  const [allocations, setAllocations] = useState([])
   useEffect(() => {
     if (localStorage.getItem('isNGOAuthenticated') !== 'true') {
       navigate('/ngo-login')
@@ -19,8 +16,7 @@ export default function NGODashboard() {
     }
 
     getDashboard().then(setData)
-    getMapMarkers().then(setMarkers)
-    getReportedDisasters().then(setDisasters)
+    getNGOAllocationHistory().then(setAllocations)
   }, [navigate])
 
   if (!data) {
@@ -71,42 +67,22 @@ export default function NGODashboard() {
         </div>
 
         <div className="dashboard-grid">
-          <div className="panel map-panel">
-            <h2 className="panel-title">Field Map</h2>
-            <DisasterMap markers={markers} height="420px" />
-          </div>
           <div className="dashboard-sidebar">
-            <div className="panel">
-              <h3 className="panel-title">NGO Actions</h3>
+            <div className="panel list-panel">
+              <h3 className="panel-title">Disaster Allocation History</h3>
               <div className="service-list">
-                <Link to="/ngo-dashboard/report" className="service-card">
-                  <div className="service-icon"><FileWarning size={18} /></div>
-                  <div className="service-info">
-                    <strong>Report New Incident</strong>
-                    <span>Share latest field details.</span>
-                  </div>
-                </Link>
-                <Link to="/ngo-dashboard/routes" className="service-card">
-                  <div className="service-icon"><Route size={18} /></div>
-                  <div className="service-info">
-                    <strong>Plan Safe Routes</strong>
-                    <span>Coordinate movement and relief deliveries.</span>
-                  </div>
-                </Link>
-              </div>
-            </div>
-            
-            <div className="panel list-panel" style={{ marginTop: '20px' }}>
-              <h3 className="panel-title">Reported Disasters</h3>
-              <div className="service-list">
-                {disasters.map((d) => (
-                  <div key={d.id} className="service-card" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                {allocations.length === 0 && (
+                  <p className="empty-state">No disasters have been allocated to this NGO yet.</p>
+                )}
+                {allocations.map((allocation) => (
+                  <div key={allocation.id} className="service-card" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <div className="service-info" style={{ marginLeft: 0 }}>
-                      <strong>{d.type}</strong>
-                      <span>{d.location}</span>
+                      <strong>{allocation.type}</strong>
+                      <span>{allocation.location}</span>
+                      <small>Allocated on {allocation.allocatedOn}</small>
                     </div>
-                    <span className={`status-badge ${d.status.toLowerCase().replace(' ', '-')}`}>
-                      {d.status}
+                    <span className={`status-badge ${allocation.status.toLowerCase().replace(' ', '-')}`}>
+                      {allocation.status}
                     </span>
                   </div>
                 ))}

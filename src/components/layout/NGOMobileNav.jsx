@@ -1,11 +1,10 @@
 import { NavLink } from 'react-router-dom'
-import { LayoutDashboard, Map, FileWarning, Package, Menu } from 'lucide-react'
+import { LayoutDashboard, Map, Package, Menu } from 'lucide-react'
 import './MobileNav.css'
 
 const items = [
   { to: '/ngo-dashboard', icon: LayoutDashboard, label: 'Dashboard' },
   { to: '/ngo-dashboard/map', icon: Map, label: 'Map' },
-  { to: '/ngo-dashboard/report', icon: FileWarning, label: 'Report' },
   { to: '/ngo-dashboard/resources', icon: Package, label: 'Resources' },
   { to: '/ngo-dashboard/more', icon: Menu, label: 'More' },
 ]

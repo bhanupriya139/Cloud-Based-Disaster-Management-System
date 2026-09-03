@@ -6,11 +6,7 @@ import {
   Package,
   Building2,
   LayoutDashboard,
-  CloudRain,
   Bell,
-  Route,
-  Siren,
-  Settings,
   BarChart3,
 } from 'lucide-react'
 import Header from '../components/layout/Header'
@@ -111,12 +107,10 @@ export default function AdminDashboard() {
 
 export function MoreMenu() {
   const links = [
-    { to: '/admin/emergency', icon: Siren, label: 'Emergency' },
     { to: '/admin/ngos', icon: Building2, label: 'NGO Directory' },
     { to: '/admin/alerts', icon: Bell, label: 'Alerts' },
     { to: '/admin/analytics', icon: BarChart3, label: 'Analytics' },
     { to: '/admin', icon: LayoutDashboard, label: 'Admin Dashboard' },
-    { to: '/admin/settings', icon: Settings, label: 'Settings' },
   ]
 
   return (

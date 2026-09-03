@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Ambulance, Flame, HeartPulse } from 'lucide-react'
 import Header from '../components/layout/Header'
 import { getNearbyResources } from '../api/services'
+import { getCurrentLocation } from '../utils/location'
 import './pages.css'
 
 const iconMap = {
@@ -12,9 +13,13 @@ const iconMap = {
 
 export default function Resources() {
   const [resources, setResources] = useState([])
+  const [error, setError] = useState(null)
 
   useEffect(() => {
-    getNearbyResources(19.076, 72.8777).then(setResources)
+    getCurrentLocation()
+      .then(({ lat, lng }) => getNearbyResources(lat, lng))
+      .then(setResources)
+      .catch((err) => setError(err.message))
   }, [])
 
   return (
@@ -24,7 +29,7 @@ export default function Resources() {
         <h2 className="page-title">Emergency Resources</h2>
         <p className="page-subtitle">Available resources near your location</p>
 
-        <div className="resource-cards grid">
+        {error ? <p className="form-status error">{error}</p> : <div className="resource-cards grid">
           {resources.map((r) => {
             const Icon = iconMap[r.name] || HeartPulse
             return (
@@ -45,7 +50,7 @@ export default function Resources() {
               </div>
             )
           })}
-        </div>
+        </div>}
       </div>
     </div>
   )

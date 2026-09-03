@@ -19,7 +19,7 @@ export default function SafeRoutes() {
 
   return (
     <div className="page">
-      <Header />
+      <Header userName="NGO" />
       <div className="page-content">
         <h2 className="page-title">Safe Routes</h2>
         <p className="page-subtitle">Navigate to the nearest relief camp safely</p>

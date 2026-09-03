@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Ambulance, Flame, Shield, Users, Phone } from 'lucide-react'
 import Header from '../components/layout/Header'
 import { getEmergencyServices, requestEmergency, triggerSOS } from '../api/services'
+import { getCurrentLocation } from '../utils/location'
 import './pages.css'
 
 const iconMap = {
@@ -23,7 +24,7 @@ export default function Emergency() {
   const handleSOS = async () => {
     setSosStatus(null)
     try {
-      const result = await triggerSOS({ lat: 19.076, lng: 72.8777 })
+      const result = await triggerSOS(await getCurrentLocation())
       setSosStatus({ type: 'success', message: result.message })
     } catch (err) {
       setSosStatus({ type: 'error', message: err.message })
@@ -33,7 +34,7 @@ export default function Emergency() {
   const handleRequest = async (serviceId) => {
     setRequestStatus(null)
     try {
-      const result = await requestEmergency(serviceId, { lat: 19.076, lng: 72.8777 })
+      const result = await requestEmergency(serviceId, await getCurrentLocation())
       setRequestStatus({ type: 'success', message: result.message })
     } catch (err) {
       setRequestStatus({ type: 'error', message: err.message })

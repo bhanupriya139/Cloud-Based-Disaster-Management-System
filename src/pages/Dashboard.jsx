@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import {
   AlertTriangle,
   CloudRain,
@@ -16,15 +16,25 @@ import {
 import Header from '../components/layout/Header'
 import DisasterMap from '../components/map/DisasterMap'
 import { getDashboard, getMapMarkers } from '../api/services'
+import { getCurrentLocation, getSavedUserLocation, reverseGeocode, saveUserLocation } from '../utils/location'
 import './pages.css'
 
 export default function Dashboard() {
-  const navigate = useNavigate()
   const [data, setData] = useState(null)
   const [markers, setMarkers] = useState([])
+  const [userLocation, setUserLocation] = useState(getSavedUserLocation)
   const [error, setError] = useState(null)
 
   useEffect(() => {
+    getCurrentLocation()
+      .then((currentLocation) => {
+        reverseGeocode(currentLocation)
+          .then((label) => saveUserLocation({ ...currentLocation, label }))
+          .catch(() => saveUserLocation(currentLocation))
+        setUserLocation(currentLocation)
+      })
+      .catch(() => {})
+
     getDashboard()
       .then(setData)
       .catch((err) => {
@@ -49,11 +59,9 @@ export default function Dashboard() {
     )
   }
 
-  const location = `${data.location.city}, ${data.location.state}`
-
   return (
     <div className="page">
-      <Header location={location} />
+      <Header />
       <div className="page-content">
         <div className="stat-cards">
           <div className="stat-card danger">
@@ -89,7 +97,14 @@ export default function Dashboard() {
         <div className="dashboard-grid">
           <div className="panel map-panel">
             <h2 className="panel-title">Live Disaster Map</h2>
-            <DisasterMap markers={markers} height="420px" />
+            <DisasterMap
+              markers={userLocation ? [
+                ...markers,
+                { id: 'current-user', type: 'ngo', ...userLocation, label: 'Your Location' },
+              ] : markers}
+              center={userLocation ? [userLocation.lat, userLocation.lng] : undefined}
+              height="420px"
+            />
           </div>
 
           <div className="dashboard-sidebar">

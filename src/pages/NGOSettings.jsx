@@ -5,7 +5,7 @@ import './pages.css'
 export default function Settings() {
   return (
     <div className="page">
-      <Header />
+      <Header userName="NGO" />
       <div className="page-content narrow">
         <h2 className="page-title">Settings</h2>
         <p className="page-subtitle">Configure your preferences and API connection</p>

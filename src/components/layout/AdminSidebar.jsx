@@ -1,14 +1,11 @@
 import { NavLink, useNavigate } from 'react-router-dom'
 import {
   LayoutDashboard,
-  Map,
-  Package,
   Building2,
   Bell,
+  UserCheck,
   BarChart3,
-  Settings,
   Shield,
-  Siren,
   Home,
   LogOut,
 } from 'lucide-react'
@@ -17,13 +14,10 @@ import './Sidebar.css'
 const navItems = [
   { to: '/', icon: Home, label: 'Home Page' },
   { to: '/admin', icon: LayoutDashboard, label: 'Admin Dashboard' },
-  { to: '/admin/map', icon: Map, label: 'Live Map' },
-  { to: '/admin/emergency', icon: Siren, label: 'Emergency' },
   { to: '/admin/ngos', icon: Building2, label: 'NGO Directory' },
+  { to: '/admin/ngo-requests', icon: UserCheck, label: 'NGO Requests' },
   { to: '/admin/alerts', icon: Bell, label: 'Alerts' },
-  { to: '/admin/resources', icon: Package, label: 'Resources' },
   { to: '/admin/analytics', icon: BarChart3, label: 'Analytics' },
-  { to: '/admin/settings', icon: Settings, label: 'Settings' },
 ]
 
 export default function AdminSidebar() {
